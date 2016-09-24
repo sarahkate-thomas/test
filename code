@@ -1,0 +1,96 @@
+#include <iostream>
+#include <math.h>
+#include <vector>
+
+using namespace std;
+
+// NAME: Sarah Kate Thomas
+// LAB: CSC 112 Lab #2 - Part 0
+
+int main() {
+    vector <int> primes(0);
+    vector <bool> is_prime(0);
+    int kN;
+    int i, j;
+    int jtmp, ktmp;
+    int i_limit;
+    int num_primes = 0;
+    int max_prime = 2;
+    int prime_diff_avg = 0;
+    int prime_diff;
+    int num_twin_prime_pairs = 0;
+    int rem1;
+    int rem2;
+
+    cout << "Enter kN: " << endl;
+    cin >> kN;
+    primes.resize(kN+1);
+    is_prime.resize(kN+1);
+
+    for (i=0; i<=kN; ++i) {
+        is_prime.at(i) = true;
+        primes.at(i) = 0;
+    }
+    is_prime.at(0) = is_prime.at(1) = false;
+
+    i_limit = ((int) sqrt(kN)) + 1;
+
+    for (i=2; i<=i_limit; ++i){
+        if (is_prime.at(i)){
+            for (j=i*i; j<=kN; j+=i){
+                is_prime.at(j) = false;
+            }
+
+        }
+    }
+    j = 0;
+
+    //Put primes in primes vector and print
+    for (i=2; i<=kN; ++i){
+        if (is_prime.at(i)) {
+            cout << i << " ";
+            primes.at(j) = i;
+            ++j;
+            ++num_primes;
+            max_prime = i;
+
+        }
+    }
+    cout << endl << "#Primes: " << num_primes <<
+         ", Max_prime: " << max_prime << endl;
+
+    if (num_primes >= 2) {
+        for (i=0; i<num_primes-1; ++i){
+            prime_diff = primes.at(i+1) - primes.at(i);
+            if (prime_diff == 2) {++num_twin_prime_pairs;}
+            prime_diff_avg += prime_diff;
+        }
+        prime_diff_avg = prime_diff_avg/(num_primes-1);
+    }
+
+    cout << "Avg prime diff: " << prime_diff_avg << endl;
+
+    if (num_primes >= 2) {
+        for (i=0; i<num_primes-1; ++i){
+            rem1 = primes.at(i) % 10;
+            rem2 = primes.at(i+1) % 10;
+            if (rem1 > rem2) {
+                jtmp = primes.at(i);
+                ktmp = primes.at(i+1);
+                jtmp = jtmp/10*10 + rem2;
+                ktmp = ktmp/10*10 + rem1;
+                primes.at(i) = jtmp;
+                primes.at(i+1) = ktmp;
+            }
+        }
+    }
+    cout << "#Twin prime pairs: " << num_twin_prime_pairs << endl;
+
+    // Print the priemes found.
+    for (i=0; i<num_primes; ++i){
+        cout << primes.at(i) << " ";
+    }
+
+
+    return 0;
+}
